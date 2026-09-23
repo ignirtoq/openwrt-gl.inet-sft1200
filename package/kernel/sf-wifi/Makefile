@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/sf-wifi
   SUBMENU:=Wireless Drivers
   TITLE:=Siflower SF19A28/SF19A2890 WiFi driver
-  DEPENDS:=@TARGET_siflower +kmod-cfg80211
+  DEPENDS:=@TARGET_siflower +kmod-cfg80211 +@DRIVER_11AC_SUPPORT
   FILES:= \
 	$(PKG_BUILD_DIR)/sf_smac/src/rf/sf16a18_rf.ko \
 	$(PKG_BUILD_DIR)/sf_smac/src/startcore/startcore.ko \
