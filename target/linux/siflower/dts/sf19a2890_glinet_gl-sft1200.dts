@@ -212,21 +212,31 @@
 
 &mdio {
 	/*
-	 * Switch sits at SMDIO address 0 and probes as Intel GSW150
-	 * ("standalone switch part number 0x30 v1.2" on real hardware,
-	 * confirmed by ulli-kroll's boot log on GL-SFT1200).
+	 * As in dangowrt's gl-sft1200 branch: the switch sits at MDIO
+	 * address 0x1f behind a reset line on GPIO 0. On a GL-SFT1200 it
+	 * probes as "GSWIP version 23 mod 0", "standalone switch part
+	 * number 0x31 v1.3".
 	 */
-	switch: switch@0 {
-		reg = <0x00>;
+	reset-gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
+	reset-delay-us = <10000>;
+	reset-post-delay-us = <100000>;
+	clock-frequency = <12500000>;
+
+	switch: switch@1f {
+		reg = <0x1f>;
 		dsa,member = <0 0>;
-		compatible = "intel,gsw150";
+		compatible = "maxlinear,gsw140";
 
 		/*
-		 * Use 802.1Q VLAN tagging instead of proprietary DSA tag.
-		 * Required for HNAT hardware acceleration - the HNAT engine
-		 * cannot process the 8-byte MaxLinear DSA header.
+		 * 802.1Q VLAN tagging instead of the proprietary DSA tag is
+		 * required for HNAT hardware acceleration (the HNAT engine
+		 * cannot process the 8-byte MaxLinear DSA header), but with
+		 * dsa,tag-8021q set the LAN ports pass no traffic on a real
+		 * GL-SFT1200 (the switch probes and links come up, but no ARP
+		 * replies). Left disabled until the tagger works on this switch.
+		 *
+		 * dsa,tag-8021q;
 		 */
-		dsa,tag-8021q;
 
 		ports {
 			#address-cells = <1>;
