@@ -95,16 +95,20 @@
 	status = "okay";
 	nvmem-cells = <&rf_cali_config_factory_800>,
 		      <&wifi_version_factory_800>,
-		      <&wifi_info_factory_802>;
-	nvmem-cell-names = "rf-cali-config", "wifi-version", "wifi-info";
+		      <&wifi_info_factory_804>,
+		      <&macaddr_factory_0>;
+	nvmem-cell-names = "rf-cali-config", "wifi-version", "wifi-info",
+			   "mac-address";
 };
 
 &wlan5 {
 	status = "okay";
 	nvmem-cells = <&rf_cali_config_factory_800>,
 		      <&wifi_version_factory_800>,
-		      <&wifi_info_factory_802>;
-	nvmem-cell-names = "rf-cali-config", "wifi-version", "wifi-info";
+		      <&wifi_info_factory_804>,
+		      <&macaddr_factory_0>;
+	nvmem-cell-names = "rf-cali-config", "wifi-version", "wifi-info",
+			   "mac-address";
 };
 
 &uart0 {
@@ -173,9 +177,10 @@
 					 * a factory dump from stock firmware:
 					 *   0x800: version marker (2 bytes, "XO"/"V2".."V4")
 					 *   0x802: XO config (le16)
-					 *   0x802: txpower calibration table ("wifi info",
-					 *          XO + LB + HB gain tables, max 3380 bytes)
-					 * Vendor DT used "mtd-rf-cali-config = <&factory 0x800>".
+					 *   0x804: txpower calibration table ("wifi info",
+					 *          LB + HB gain tables, max 3380 bytes)
+					 * Vendor DT used "mtd-rf-cali-config = <&factory 0x800>"
+					 * and "mtd-tx-power-cali-config = <&factory 0x804>".
 					 */
 					rf_cali_config_factory_800: rf-cali-config@800 {
 						reg = <0x800 0x4>;
@@ -185,8 +190,8 @@
 						reg = <0x800 0x2>;
 					};
 
-					wifi_info_factory_802: wifi-info@802 {
-						reg = <0x802 0xd34>;
+					wifi_info_factory_804: wifi-info@804 {
+						reg = <0x804 0xd34>;
 					};
 				};
 			};
